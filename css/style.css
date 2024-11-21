@@ -1,0 +1,214 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+body{
+    background: #9DD2B2;
+    scroll-behavior: smooth;
+}
+
+#navbar{
+    background-color: #011627;
+    height: fit-content;
+    line-height: 600%;
+    color: #E8F1F2;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100; /* Add z-index to ensure navbar stays on top */
+}
+
+a{
+    color: #E8F1F2;
+    text-decoration: none;
+}
+
+.active{
+    color: #2C6E49;
+}
+
+a:hover{
+    transition: 0.5s;
+    color: #2C6E49;
+}
+
+#bar ul{
+    float: right;
+    position: relative;
+    right: 8vw;
+    transition: 3s;
+}
+
+li{
+    display: inline;
+    font-size: 1.5rem;
+    margin-right: 2vw;
+    text-transform: uppercase;
+}
+
+/* Special styling for sign in/up links */
+#sign a {
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+#sign a{
+    background-color: transparent;
+    border: 2px solid #2C6E49;
+}
+
+#sign a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+h1{
+    display: inline;
+    font-size: 2.4rem;
+    margin-left: 6vw;
+    margin-top: 3vh;
+    text-transform: uppercase;
+    word-spacing: 0.5rem;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #1b1618;
+}
+
+#hii{
+    margin-top: 2vh;
+    font-size: 1.7rem;
+}
+
+#logoo{
+    margin: auto;
+    margin-top: 300px;
+    display: block;
+    width: 250px;
+}
+
+hr{
+    border: 2px solid #E8F1F2;
+    background-color: #E8F1F2;
+    display: block;
+    width: 40vw;
+    margin: auto;
+    margin-top: 3vh;
+}
+
+.intro h1{
+    font-size: 4vw;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    margin: auto;
+    margin-top: 5vh;
+}
+
+footer{
+    color: #E8F1F2;
+    text-align: center;
+    margin-top: 25vh;
+    line-height: 80px;
+    background-color: #685044;
+}
+
+.line{
+    width: 30px;
+    height: 5px;
+    background: #E8F1F2;
+    margin-top: 5px;
+}
+
+.ham{
+    position: absolute;
+    top: 33px;
+    right: 10px;
+    display: none;
+    z-index: 101; /* Add z-index to ensure hamburger menu stays on top */
+}
+
+@media only screen and (max-width: 1096px){
+    li{
+        display: block;
+        font-size: 1rem;
+    }
+
+    #bar ul{
+        float: none;
+        right: 0;
+        margin-left: 6vw;
+    }
+
+    #bar h1{
+        font-size: 1.5rem;
+    }
+
+    #sign a {
+        display: inline-block;
+        margin: 5px 0;
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+
+    footer{
+        font-size: 0.8rem;
+        width: 100%;
+    }
+
+    .ham{
+        display: block;
+    }
+
+    ul{
+        display: none;
+    }
+
+    #ham1{
+        display: block;
+    }
+
+    #cross{
+        display: none;
+    }
+
+    #cross .line{
+        background-color: #2C6E49;
+    }
+}
+
+@media only screen and (max-width: 450px){
+    .intro h1{
+        font-size: 1.8rem;
+    }
+
+    #hii{
+        font-size: 1.2rem;
+    }
+
+    #bar h1 {
+        font-size: 1.3rem;
+    }
+
+    #sign a {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+    }
+
+    footer{
+        font-size: 0.75rem;
+    }
+}
+
+@media only screen and (min-width: 1097px){
+    ul{
+        display: block !important;
+    }
+
+    .ham{
+        display: none !important;
+    }
+}
