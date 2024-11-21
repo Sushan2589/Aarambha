@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .forum {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .forum .post {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .forum .post .content {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        function addPost() {
+            var post = document.createElement('div');
+            post.className = 'post';
+            post.innerHTML = '<h2>New Post</h2><div class="content">' + document.getElementById('postContent').value + '</div>';
+            document.getElementById('forum').appendChild(post);
+        }
+    </script>
+</head>
+<body>
+    <div id="forum" class="forum">
+        <div class="post">
+            <h2>Discussion on using HTML, CSS and JS</h2>
+            <p>Feel free to start a new thread or join an existing one.</p>
+        </div>
+    </div>
+    <div>
+        <textarea id="postContent" placeholder="Enter your post here"></textarea>
+        <button onclick="addPost()">Add Post</button>
+    </div>
+</body>
+</html>
+
+
+
