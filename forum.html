@@ -4,6 +4,16 @@
     <title>Forum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2C6E49;
+            --secondary-color: #9DD2B2;
+            --background-color: #E8F1F2;
+            --text-color: #011627;
+            --text-secondary: #685044;
+            --error-color: #ff4444;
+            --border-color: #ccc;
+        }
+
         body {
             font-family: Arial, sans-serif;
         }
@@ -12,12 +22,15 @@
             margin: 0 auto;
         }
         .forum .post {
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-color);
             padding: 10px;
             margin-bottom: 10px;
         }
         .forum .post .content {
             margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
         .user-select {
             position: absolute;
@@ -31,14 +44,14 @@
             margin-bottom: 5px;
         }
         .forum {
-            background-color: #E8F1F2;
+            background-color: var(--background-color);
             padding: 20px;
             border-radius: 8px;
         }
 
         .post {
             background-color: #fff;
-            border: 1px solid #9DD2B2;
+            border: 1px solid var(--secondary-color);
             border-radius: 4px;
             margin-bottom: 15px;
             box-shadow: 0 2px 4px rgba(1, 22, 39, 0.1);
@@ -49,7 +62,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #ff4444;
+            background-color: var(--error-color);
             color: white;
             border: none;
             padding: 5px 10px;
@@ -58,33 +71,62 @@
         }
 
         .post h2 {
-            color: #011627;
+            color: var(--text-color);
             margin: 0 0 10px 0;
             font-size: 1.4em;
         }
 
         .post .content {
-            color: #685044;
+            color: var(--text-secondary);
             line-height: 1.5;
         }
 
+        .post-image {
+            max-width: 150px;
+            height: auto;
+            border-radius: 4px;
+            margin-left: 20px;
+        }
+
         .post-author {
-            color: #2C6E49;
+            color: var(--primary-color);
             font-weight: bold;
+        }
+
+        .post-date {
+            color: #666;
+            font-size: 0.8em;
+            margin-left: 10px;
         }
 
         input, textarea {
             width: 100%;
             padding: 8px;
             margin: 8px 0;
-            border: 1px solid #9DD2B2;
+            border: 1px solid var(--secondary-color);
             border-radius: 4px;
             box-sizing: border-box;
         }
 
+        .file-upload {
+            display: inline-block;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-name {
+            margin-left: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
         button {
-            background-color: #2C6E49;
-            color: #E8F1F2;
+            background-color: var(--primary-color);
+            color: var(--background-color);
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
@@ -98,23 +140,23 @@
         }
 
         .user-select {
-            background-color: #E8F1F2;
-            border: 1px solid #9DD2B2;
-            color: #011627;
+            background-color: var(--background-color);
+            border: 1px solid var(--secondary-color);
+            color: var(--text-color);
             border-radius: 4px;
         }
 
         .like-button {
             background-color: transparent;
-            color: #2C6E49;
-            border: 1px solid #2C6E49;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
             padding: 5px 10px;
             margin-top: 10px;
         }
 
         .like-button.liked {
-            background-color: #2C6E49;
-            color: #E8F1F2;
+            background-color: var(--primary-color);
+            color: var(--background-color);
         }
 
         .likes-info {
@@ -144,7 +186,7 @@
             padding: 8px;
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: 1px solid #9DD2B2;
+            border: 1px solid var(--secondary-color);
             white-space: nowrap;
             z-index: 1000;
         }
@@ -155,7 +197,7 @@
 
         .replies {
             margin-left: 30px;
-            border-left: 2px solid #9DD2B2;
+            border-left: 2px solid var(--secondary-color);
             padding-left: 15px;
             display: none;
         }
@@ -167,10 +209,17 @@
 
         .reply-button {
             background-color: transparent;
-            color: #2C6E49;
-            border: 1px solid #2C6E49;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
             padding: 5px 10px;
             margin-right: 10px;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
         }
     </style>
     <script>
@@ -180,11 +229,20 @@
         window.onload = function() {
             const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
             posts.forEach(postData => {
-                createPostElement(postData.heading, postData.content, postData.author, postData.likes || [], postData.replies || []);
+                createPostElement(postData.heading, postData.content, postData.author, postData.likes || [], postData.replies || [], postData.date || new Date().toLocaleString(), postData.image);
+            });
+
+            // Add file upload listeners
+            document.querySelectorAll('.file-upload input[type="file"]').forEach(input => {
+                input.addEventListener('change', function(e) {
+                    const fileName = e.target.files[0]?.name;
+                    const label = this.nextElementSibling;
+                    label.textContent = fileName || 'No file chosen';
+                });
             });
         }
 
-        function createPostElement(heading, content, author, likes = [], replies = []) {
+        function createPostElement(heading, content, author, likes = [], replies = [], date, image) {
             var post = document.createElement('div');
             post.className = 'post';
             const authorDisplay = author === currentUser ? 'You' : author;
@@ -202,8 +260,13 @@
 
             const repliesHtml = replies.map(reply => `
                 <div class="post">
-                    <div class="post-author">Reply by: ${reply.author === currentUser ? 'You' : reply.author}</div>
-                    <div class="content">${reply.content}</div>
+                    <div class="post-author">Reply by: ${reply.author === currentUser ? 'You' : reply.author}
+                        <span class="post-date">${reply.date || 'Unknown date'}</span>
+                    </div>
+                    <div class="content">
+                        <div>${reply.content}</div>
+                        ${reply.image ? `<img src="${reply.image}" class="post-image" alt="Reply image">` : ''}
+                    </div>
                     ${reply.author === currentUser ? 
                         `<button class="delete-button" onclick="deleteReply('${heading}', '${content}', '${author}', '${reply.content}')">Delete</button>` 
                         : ''}
@@ -214,18 +277,29 @@
                 ${author === currentUser ? 
                     `<button class="delete-button" onclick="deletePost('${heading}', '${content}', '${author}')">Delete</button>` 
                     : ''}
-                <div class="post-author">Posted by: ${authorDisplay}</div>
+                <div class="post-author">Posted by: ${authorDisplay}
+                    <span class="post-date">${date}</span>
+                </div>
                 <h2>${heading}</h2>
-                <div class="content">${content}</div>
+                <div class="content">
+                    <div>${content}</div>
+                    ${image ? `<img src="${image}" class="post-image" alt="Post image">` : ''}
+                </div>
                 <button class="${likeButtonClass}" onclick="toggleLike('${heading}', '${content}', '${author}')">${likeButtonText}</button>
                 <button class="reply-button" onclick="toggleReplyForm('${heading}', '${content}', '${author}')">Reply</button>
-                <button onclick="toggleReplies('${heading}')">Show/Hide Replies</button>
+                <button onclick="toggleReplies('${heading}')" id="toggleBtn-${heading}">Show Replies (${replies.length})</button>
                 <div class="likes-info">
                     <i class="fas fa-heart"></i>
                     ${likesHtml}
                 </div>
                 <div class="reply-form" id="replyForm-${heading}">
                     <textarea id="replyContent-${heading}" placeholder="Write your reply..."></textarea>
+                    <label class="file-upload">
+                        <i class="fas fa-paperclip"></i>
+                        <input type="file" id="replyImage-${heading}" accept="image/*">
+                        <span class="file-name">No file chosen</span>
+                    </label>
+                    <div class="error-message" id="replyError-${heading}">Please type something before submitting</div>
                     <button onclick="addReply('${heading}', '${content}', '${author}')">Submit Reply</button>
                 </div>
                 <div class="replies" id="replies-${heading}">
@@ -237,7 +311,18 @@
 
         function toggleReplies(heading) {
             const repliesDiv = document.getElementById(`replies-${heading}`);
-            repliesDiv.style.display = repliesDiv.style.display === 'none' ? 'block' : 'none';
+            const toggleBtn = document.getElementById(`toggleBtn-${heading}`);
+            const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
+            const post = posts.find(p => p.heading === heading);
+            const replyCount = post.replies ? post.replies.length : 0;
+            
+            if (repliesDiv.style.display === 'none') {
+                repliesDiv.style.display = 'block';
+                toggleBtn.textContent = `Hide Replies (${replyCount})`;
+            } else {
+                repliesDiv.style.display = 'none';
+                toggleBtn.textContent = `Show Replies (${replyCount})`;
+            }
         }
 
         function deletePost(heading, content, author) {
@@ -275,8 +360,15 @@
 
         function addReply(heading, content, author) {
             const replyContent = document.getElementById(`replyContent-${heading}`).value;
-            if (!replyContent.trim()) return;
-
+            const replyImage = document.getElementById(`replyImage-${heading}`).files[0];
+            const errorElement = document.getElementById(`replyError-${heading}`);
+            
+            if (!replyContent.trim()) {
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            errorElement.style.display = 'none';
             const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
             const postIndex = posts.findIndex(p => p.heading === heading && p.content === content && p.author === author);
             
@@ -284,14 +376,29 @@
                 if (!posts[postIndex].replies) {
                     posts[postIndex].replies = [];
                 }
-                
-                posts[postIndex].replies.push({
-                    author: currentUser,
-                    content: replyContent
-                });
-                
-                sessionStorage.setItem('forumPosts', JSON.stringify(posts));
-                refreshPosts();
+
+                if (replyImage) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        posts[postIndex].replies.push({
+                            author: currentUser,
+                            content: replyContent,
+                            image: e.target.result,
+                            date: new Date().toLocaleString()
+                        });
+                        sessionStorage.setItem('forumPosts', JSON.stringify(posts));
+                        refreshPosts();
+                    };
+                    reader.readAsDataURL(replyImage);
+                } else {
+                    posts[postIndex].replies.push({
+                        author: currentUser,
+                        content: replyContent,
+                        date: new Date().toLocaleString()
+                    });
+                    sessionStorage.setItem('forumPosts', JSON.stringify(posts));
+                    refreshPosts();
+                }
             }
         }
 
@@ -317,20 +424,45 @@
         }
 
         function addPost() {
-            var heading = document.getElementById('postHeading').value || 'New Post';
+            var heading = document.getElementById('postHeading').value;
             var content = document.getElementById('postContent').value;
+            var imageFile = document.getElementById('postImage').files[0];
             
-            // Create and add post element to DOM
-            createPostElement(heading, content, currentUser, [], []);
+            if (!heading.trim() || !content.trim()) {
+                document.getElementById('postError').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('postError').style.display = 'none';
+            const date = new Date().toLocaleString();
 
-            // Save to sessionStorage
-            const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
-            posts.push({ heading, content, author: currentUser, likes: [], replies: [] });
-            sessionStorage.setItem('forumPosts', JSON.stringify(posts));
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Create and add post element to DOM with image
+                    createPostElement(heading, content, currentUser, [], [], date, e.target.result);
+
+                    // Save to sessionStorage
+                    const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
+                    posts.push({ heading, content, author: currentUser, likes: [], replies: [], date, image: e.target.result });
+                    sessionStorage.setItem('forumPosts', JSON.stringify(posts));
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                // Create and add post element to DOM without image
+                createPostElement(heading, content, currentUser, [], [], date);
+
+                // Save to sessionStorage
+                const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
+                posts.push({ heading, content, author: currentUser, likes: [], replies: [], date });
+                sessionStorage.setItem('forumPosts', JSON.stringify(posts));
+            }
 
             // Clear input fields
             document.getElementById('postHeading').value = '';
             document.getElementById('postContent').value = '';
+            document.getElementById('postImage').value = '';
+            document.querySelector('.file-name').textContent = 'No file chosen';
         }
 
         function refreshPosts() {
@@ -342,7 +474,7 @@
             `;
             const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
             posts.forEach(postData => {
-                createPostElement(postData.heading, postData.content, postData.author, postData.likes || [], postData.replies || []);
+                createPostElement(postData.heading, postData.content, postData.author, postData.likes || [], postData.replies || [], postData.date, postData.image);
             });
         }
 
@@ -369,6 +501,12 @@
     <div>
         <input type="text" id="postHeading" placeholder="Enter post heading">
         <textarea id="postContent" placeholder="Enter your post here"></textarea>
+        <label class="file-upload">
+            <i class="fas fa-paperclip"></i>
+            <input type="file" id="postImage" accept="image/*">
+            <span class="file-name">No file chosen</span>
+        </label>
+        <div class="error-message" id="postError">Please fill in both heading and content before posting</div>
         <button onclick="addPost()">Add Post</button>
     </div>
 </body>
