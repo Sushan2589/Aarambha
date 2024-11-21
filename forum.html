@@ -3,6 +3,7 @@
 <head>
     <title>Forum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         :root {
             --primary-color: #2C6E49;
@@ -16,10 +17,12 @@
 
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
         .forum {
             width: 80%;
-            margin: 0 auto;
+            margin: 20px auto;
         }
         .forum .post {
             border: 1px solid var(--border-color);
@@ -34,7 +37,7 @@
         }
         .user-select {
             position: absolute;
-            top: 20px;
+            top: 80px;
             right: 20px;
             padding: 5px;
         }
@@ -220,6 +223,47 @@
             font-size: 0.9em;
             margin-top: 5px;
             display: none;
+        }
+
+        .post-form {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            margin-bottom: 200px;
+        }
+
+        /* Login dropdown styles */
+        .login-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .login-dropdown.show {
+            display: block;
+        }
+
+        .login-dropdown input {
+            margin: 5px 0;
+            padding: 5px;
+            width: 200px;
+        }
+
+        .login-dropdown button {
+            width: 100%;
+            margin-top: 5px;
         }
     </style>
     <script>
@@ -482,9 +526,45 @@
             currentUser = document.getElementById('userSelect').value;
             refreshPosts();
         }
+
+        function toggleLoginDropdown() {
+            document.querySelector('.login-dropdown').classList.toggle('show');
+        }
     </script>
 </head>
 <body>
+    <div id="navbar">
+        <nav id="bar">
+            <h1><span style="color: #2C6E49;">AGRI</span><span style="color: #685044;">CONNECT</span></h1>
+            <ul>
+                <li class='navli'><a  href="">Home</a></li>
+                <li class='navli'><a class="active" href="forum.html">Forum</a></li>
+                <li class='navli'><a href="about.html">About</a></li>
+                <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
+                <li id="sign" class='navli'>
+                    <a href="#" onclick="toggleLoginDropdown()">Sign in</a>
+                    <a href="signup.html">Sign up</a>
+                </li>
+            </ul>
+            <div class="ham" id="ham1" onclick="navig()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <div id="cross" class="ham" onclick="navig1()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="login-dropdown">
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
     <select id="userSelect" class="user-select" onchange="changeUser()">
         <option value="Sulav">Sulav</option>
         <option value="Sushan">Sushan</option>
@@ -492,13 +572,17 @@
         <option value="Supreme">Supreme</option>
         <option value="Ram">Ram</option>
     </select>
-    <div id="forum" class="forum">
-        <div class="post">
-            <h2>Discussion on using HTML, CSS and JS</h2>
-            <p>Feel free to start a new thread or join an existing one.</p>
+
+    <div class="main-content">
+        <div id="forum" class="forum">
+            <div class="post">
+                <h2>Discussion on using HTML, CSS and JS</h2>
+                <p>Feel free to start a new thread or join an existing one.</p>
+            </div>
         </div>
     </div>
-    <div>
+
+    <div class="post-form">
         <input type="text" id="postHeading" placeholder="Enter post heading">
         <textarea id="postContent" placeholder="Enter your post here"></textarea>
         <label class="file-upload">
