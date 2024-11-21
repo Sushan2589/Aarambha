@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    
+    <title>Home | AgriConnect</title>
+    <link rel="icon" type="image/x-icon" href="./img/logo.png">
+    <style>
+        #profile-logo{
+            height: 50px;
+            width: 50px;
+            margin-top:30px
+        }
+    </style>
+</head>
+
+
+
+<body>
+
+    <div id="navbar">
+        <nav id="bar">
+
+            <h1><span style="color: #2C6E49;">AGRI</span><span style="color: #685044;">CONNECT</span></h1>
+            <ul>
+                <li class='navli'><a class="active" href="">Home</a></li>
+                <li class='navli'><a href="forum.html">Forum</a></li>
+                <li class='navli'><a href="about.html">About</a></li>
+                <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
+                <li class="profile">
+                    <img id="profile-logo" src="img/logo.png" alt="Profile" onclick="toggleProfileMenu()" />
+                    <div id="profile-menu" style="display: none;">
+                        <p id="user-email">user@example.com</p>
+                        <a href="hero.html" onclick="handleLogout()">Logout</a>
+                    </div>
+                </li>
+                
+            </ul>
+
+            
+            <div class="ham" id="ham1" onclick="navig()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+
+            <div id="cross" class="ham" onclick="navig1()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+        </nav>
+    </div>
+
+    <div class="intro">
+        <img id="logoo" src="img/logo.png" alt="Load">
+        <h1>AGRICONNECT</h1>
+        <hr>
+        <h1 id="hii">Connecting Farmers.<br>Empowering Agriculture.</h1>
+    </div>
+
+    <footer>
+        <p>Copyright© AgriConnect | All rights reserved</p>
+    </footer>
+</body>
+
+<link rel="stylesheet" href="css/style.css">
+<script src="js/script.js"></script>
+</html>

@@ -6,14 +6,18 @@ require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
-mongoose.connect(process.env.MONGODB_URI, {
 
-}).then(() => {
-    console.log('Connected to MongoDB successfully');
-}).catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1); // Exit if cannot connect to database
-});
+// Ensure that your MongoDB URI is defined
+const mongoURI = process.env.MONGODB_URI; // Check if this environment variable is set
+
+if (!mongoURI) {
+    console.error("MongoDB URI is not defined. Please set the MONGODB_URI environment variable.");
+    process.exit(1); // Exit the application if the URI is not set
+}
+
+mongoose.connect(mongoURI)
+    .then(() => console.log("MongoDB connected successfully"))
+    .catch(err => console.error("MongoDB connection error:", err));
 
 // User Schema
 const userSchema = new mongoose.Schema({
