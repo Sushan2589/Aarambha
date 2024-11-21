@@ -18,17 +18,82 @@
         .forum .post .content {
             margin-top: 10px;
         }
+        .user-select {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px;
+        }
+        .post-author {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
     </style>
     <script>
-        function addPost() {
+        let currentUser = 'Sulav';
+
+        // Load existing posts from sessionStorage when page loads
+        window.onload = function() {
+            const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
+            posts.forEach(postData => {
+                createPostElement(postData.heading, postData.content, postData.author);
+            });
+        }
+
+        function createPostElement(heading, content, author) {
             var post = document.createElement('div');
             post.className = 'post';
-            post.innerHTML = '<h2>New Post</h2><div class="content">' + document.getElementById('postContent').value + '</div>';
+            const authorDisplay = author === currentUser ? 'You' : author;
+            post.innerHTML = `
+                <div class="post-author">Posted by: ${authorDisplay}</div>
+                <h2>${heading}</h2>
+                <div class="content">${content}</div>
+            `;
             document.getElementById('forum').appendChild(post);
+        }
+
+        function addPost() {
+            var heading = document.getElementById('postHeading').value || 'New Post';
+            var content = document.getElementById('postContent').value;
+            
+            // Create and add post element to DOM
+            createPostElement(heading, content, currentUser);
+
+            // Save to sessionStorage
+            const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
+            posts.push({ heading, content, author: currentUser });
+            sessionStorage.setItem('forumPosts', JSON.stringify(posts));
+
+            // Clear input fields
+            document.getElementById('postHeading').value = '';
+            document.getElementById('postContent').value = '';
+        }
+
+        function changeUser() {
+            currentUser = document.getElementById('userSelect').value;
+            // Refresh posts to update "You" display
+            document.getElementById('forum').innerHTML = `
+                <div class="post">
+                    <h2>Discussion on using HTML, CSS and JS</h2>
+                    <p>Feel free to start a new thread or join an existing one.</p>
+                </div>
+            `;
+            const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
+            posts.forEach(postData => {
+                createPostElement(postData.heading, postData.content, postData.author);
+            });
         }
     </script>
 </head>
 <body>
+    <select id="userSelect" class="user-select" onchange="changeUser()">
+        <option value="Sulav">Sulav</option>
+        <option value="Sushan">Sushan</option>
+        <option value="Unik">Unik</option>
+        <option value="Supreme">Supreme</option>
+        <option value="Ram">Ram</option>
+    </select>
     <div id="forum" class="forum">
         <div class="post">
             <h2>Discussion on using HTML, CSS and JS</h2>
@@ -36,11 +101,9 @@
         </div>
     </div>
     <div>
+        <input type="text" id="postHeading" placeholder="Enter post heading">
         <textarea id="postContent" placeholder="Enter your post here"></textarea>
         <button onclick="addPost()">Add Post</button>
     </div>
 </body>
 </html>
-
-
-
