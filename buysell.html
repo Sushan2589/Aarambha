@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Buy/Sell | AgriConnect</title>
     <link rel="icon" type="image/x-icon" href="./img/logo.png">
     <link rel="stylesheet" href="css/style.css">
@@ -139,8 +140,9 @@
             <ul>
                 <li class='navli'><a href="hero.html">Home</a></li>
                 <li class='navli'><a href="forum.html">Forum</a></li>
-                <li class='navli'><a href="about.html">About</a></li>
+                <li class='navli'><a href="weather.html">weather</a></li>
                 <li class='navli'><a class="active" href="buysell.html">Buy/Sell</a></li>
+                <li class='navli'><a href="profile.html"><i class="fa-regular fa-user"></i></a></li>
                 <li id="profile" class='navli' style="display: none;">
                     <img id="profile-logo" src="img/logo.png" alt="Profile" onclick="toggleProfileMenu()" />
                     <div id="profile-menu" style="display: none;">
@@ -182,7 +184,6 @@
                 <input type="text" name="sellerName" placeholder="Seller Name" required>
                 <input type="tel" name="contactNumber" placeholder="Contact Number" required>
                 <input type="number" name="price" placeholder="Price" required>
-                <input type="file" name="productImage" accept="image/*">
                 <button type="submit">Add Product</button>
             </form>
         </div>
@@ -257,20 +258,13 @@
         document.getElementById('addProductForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const imageFile = e.target.productImage.files[0];
-            let imageUrl = 'img/logo.png';
-            
-            if (imageFile) {
-                imageUrl = URL.createObjectURL(imageFile);
-            }
-            
             const newProduct = {
                 name: e.target.productName.value,
                 seller: e.target.sellerName.value,
                 contact: e.target.contactNumber.value,
                 price: Number(e.target.price.value),
                 quantity: 0,
-                image: imageUrl
+                image: 'img/logo.png'
             };
             
             products.push(newProduct);
