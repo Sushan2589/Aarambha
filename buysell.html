@@ -37,9 +37,9 @@
         }
 
         .product img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
             border-radius: 8px;
             margin-bottom: 1rem;
         }
@@ -58,6 +58,14 @@
             font-size: 0.9rem;
             color: #666;
             margin: 0.5rem 0;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 5px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
         .add-product-btn {
@@ -92,6 +100,24 @@
             width: 90%;
             max-width: 500px;
             margin: 50px auto;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .modal-content button {
+            background: #2C6E49;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
         .calculate-total {
@@ -152,10 +178,11 @@
         <div class="modal-content">
             <h2>Add New Product</h2>
             <form id="addProductForm">
-                <input type="text" placeholder="Product Name" required>
-                <input type="text" placeholder="Seller Name" required>
-                <input type="tel" placeholder="Contact Number" required>
-                <input type="number" placeholder="Price" required>
+                <input type="text" name="productName" placeholder="Product Name" required>
+                <input type="text" name="sellerName" placeholder="Seller Name" required>
+                <input type="tel" name="contactNumber" placeholder="Contact Number" required>
+                <input type="number" name="price" placeholder="Price" required>
+                <input type="file" name="productImage" accept="image/*">
                 <button type="submit">Add Product</button>
             </form>
         </div>
@@ -167,39 +194,46 @@
 
     <script>
         const products = [
-            { name: "NPK Fertilizer", seller: "Ram Kumar", contact: "9876543210", price: 500 },
-            { name: "Urea", seller: "Shyam Singh", contact: "9876543211", price: 300 },
-            { name: "Compost Manure", seller: "Mohan Das", contact: "9876543212", price: 200 },
-            { name: "Grains for Hen", seller: "Rajesh Kumar", contact: "9876543213", price: 400 },
-            { name: "Earthworm", seller: "Suresh Patel", contact: "9876543214", price: 250 },
-            { name: "Organic Pesticide", seller: "Dinesh Yadav", contact: "9876543215", price: 600 },
-            { name: "Seeds Mix", seller: "Amit Shah", contact: "9876543216", price: 350 },
-            { name: "Plant Growth Promoter", seller: "Vijay Kumar", contact: "9876543217", price: 450 },
-            { name: "Bio Fertilizer", seller: "Rakesh Singh", contact: "9876543218", price: 550 },
-            { name: "Soil Conditioner", seller: "Prakash Jha", contact: "9876543219", price: 400 },
-            { name: "Neem Cake", seller: "Arun Kumar", contact: "9876543220", price: 300 },
-            { name: "Vermicompost", seller: "Sanjay Gupta", contact: "9876543221", price: 350 },
-            { name: "Bone Meal", seller: "Manoj Tiwari", contact: "9876543222", price: 450 },
-            { name: "Fish Meal", seller: "Kishore Kumar", contact: "9876543223", price: 500 },
-            { name: "Potash", seller: "Ramesh Yadav", contact: "9876543224", price: 600 }
+            { name: "NPK Fertilizer", seller: "Ram Kumar", contact: "9876543210", price: 500, quantity: 0, image: "img/Pictures/npk.jpg" },
+            { name: "Urea", seller: "Shyam Singh", contact: "9876543211", price: 300, quantity: 0, image: "img/Pictures/urea.jpg" },
+            { name: "Compost Manure", seller: "Mohan Das", contact: "9876543212", price: 200, quantity: 0, image: "img/Pictures/compost.jpg" },
+            { name: "Grains for Hen", seller: "Rajesh Kumar", contact: "9876543213", price: 400, quantity: 0, image: "img/Pictures/grains.jpg" },
+            { name: "Earthworm", seller: "Suresh Patel", contact: "9876543214", price: 250, quantity: 0, image: "img/Pictures/earthworm.jpg" },
+            { name: "Organic Pesticide", seller: "Dinesh Yadav", contact: "9876543215", price: 600, quantity: 0, image: "img/Pictures/pesticide.jpg" },
+            { name: "Seeds Mix", seller: "Amit Shah", contact: "9876543216", price: 350, quantity: 0, image: "img/Pictures/seed.jpg" },
+            { name: "Plant Growth Promoter", seller: "Vijay Kumar", contact: "9876543217", price: 450, quantity: 0, image: "img/Pictures/growth.jpg" },
+            { name: "Bio Fertilizer", seller: "Rakesh Singh", contact: "9876543218", price: 550, quantity: 0, image: "img/Pictures/bio.jpeg" },
+            { name: "Soil Conditioner", seller: "Prakash Jha", contact: "9876543219", price: 400, quantity: 0, image: "img/Pictures/soil.jpeg" },
+            { name: "Neem Cake", seller: "Arun Kumar", contact: "9876543220", price: 300, quantity: 0, image: "img/Pictures/neem.jpeg" },
+            { name: "Vermicompost", seller: "Sanjay Gupta", contact: "9876543221", price: 350, quantity: 0, image: "img/Pictures/vermi.jpeg" },
+            { name: "Bone Meal", seller: "Manoj Tiwari", contact: "9876543222", price: 450, quantity: 0, image: "img/Pictures/bone.jpg" },
+            { name: "Fish Meal", seller: "Kishore Kumar", contact: "9876543223", price: 500, quantity: 0, image: "img/Pictures/fish.jpg" },
+            { name: "Potash", seller: "Ramesh Yadav", contact: "9876543224", price: 600, quantity: 0, image: "img/Pictures/potash.jpg" }
         ];
 
         function displayProducts() {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
             
-            products.forEach(product => {
+            products.forEach((product, index) => {
                 const div = document.createElement('div');
                 div.className = 'product';
                 div.innerHTML = `
-                    <img src="img/logo.png" alt="${product.name}">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='img/logo.png'">
                     <h3>${product.name}</h3>
                     <p class="seller-info">Seller: ${product.seller}</p>
                     <p class="seller-info">Contact: ${product.contact}</p>
                     <p>Price: ₹${product.price}</p>
+                    <input type="number" min="0" value="${product.quantity}" 
+                           class="quantity-input" 
+                           onchange="updateQuantity(${index}, this.value)">
                 `;
                 grid.appendChild(div);
             });
+        }
+
+        function updateQuantity(index, value) {
+            products[index].quantity = parseInt(value) || 0;
         }
 
         function showAddProductModal() {
@@ -207,20 +241,41 @@
         }
 
         function calculateTotal() {
-            const total = products.reduce((sum, product) => sum + product.price, 0);
-            alert(`Total value of all products: ₹${total}`);
+            const total = products.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+            const itemCount = products.reduce((sum, product) => sum + product.quantity, 0);
+            alert(`Total items selected: ${itemCount}\nTotal price: ₹${total}`);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('addProductModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
         }
 
         document.getElementById('addProductForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            products.push({
-                name: formData.get('Product Name'),
-                seller: formData.get('Seller Name'),
-                contact: formData.get('Contact Number'),
-                price: Number(formData.get('Price'))
-            });
+            
+            const imageFile = e.target.productImage.files[0];
+            let imageUrl = 'img/logo.png';
+            
+            if (imageFile) {
+                imageUrl = URL.createObjectURL(imageFile);
+            }
+            
+            const newProduct = {
+                name: e.target.productName.value,
+                seller: e.target.sellerName.value,
+                contact: e.target.contactNumber.value,
+                price: Number(e.target.price.value),
+                quantity: 0,
+                image: imageUrl
+            };
+            
+            products.push(newProduct);
             displayProducts();
+            
             document.getElementById('addProductModal').style.display = 'none';
             e.target.reset();
         });
