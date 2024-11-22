@@ -5,26 +5,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Home | AgriConnect</title>
     <link rel="icon" type="image/x-icon" href="./img/logo.png">
     <style>
-        /* Add your styles here */
         #profile-logo {
             height: 50px;
             width: 50px;
-            border-radius: 50%; /* Make it circular */
+            border-radius: 50%;
         }
     </style>
 </head>
 
 <body>
-
     <div id="navbar">
         <nav id="bar">
-
             <h1><span style="color: #2C6E49;">AGRI</span><span style="color: #685044;">CONNECT</span></h1>
             <ul>
                 <li class='navli'><a class="active" href="">Home</a></li>
@@ -32,21 +28,17 @@
                 <li class='navli'><a href="weather.html">weather</a></li>
                 <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
                 <li class='navli'><a href="profile.html"><i class="fa-regular fa-user"></i></a></li>
-               
-                
             </ul>
-
-            
             <div class="ham" id="ham1" onclick="navig()">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
             </div>
-
             <div id="cross" class="ham" onclick="navig1()">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
+            </div>
         </nav>
     </div>
 
@@ -60,44 +52,38 @@
     <footer>
         <p>Copyright© AgriConnect | All rights reserved</p>
     </footer>
-</body>
-
-<link rel="stylesheet" href="css/style.css">
-<script src="js/script.js"></script>
-<script>
-    // Function to check if the user is logged in
-    async function checkUserLoggedIn() {
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        const userEmail = localStorage.getItem('userEmail');
-
-        if (isLoggedIn) {
-            document.getElementById('user-email').textContent = userEmail; // Display user email
-            document.getElementById('profile').style.display = 'block'; // Show profile
-            document.getElementById('auth-links').style.display = 'none'; // Hide login/signup links
-        } else {
-            document.getElementById('user-email').textContent = 'NOT LOGGED IN'; // Default message
-            document.getElementById('profile').style.display = 'none'; // Hide profile
-            document.getElementById('auth-links').style.display = 'block'; // Show login/signup links
+    
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js"></script>
+    <script>
+        async function checkUserLoggedIn() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userEmail = localStorage.getItem('userEmail');
+            if (isLoggedIn) {
+                document.getElementById('user-email').textContent = userEmail;
+                document.getElementById('profile').style.display = 'block';
+                document.getElementById('auth-links').style.display = 'none';
+            } else {
+                document.getElementById('user-email').textContent = 'NOT LOGGED IN';
+                document.getElementById('profile').style.display = 'none';
+                document.getElementById('auth-links').style.display = 'block';
+            }
         }
-    }
 
-    // Call this function when the page loads
-    window.onload = function() {
-        console.log('Checking user login status...');
-        checkUserLoggedIn();
-    }
+        window.onload = function() {
+            checkUserLoggedIn();
+        }
 
-    // Function to handle logout
-    function handleLogout() {
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('userEmail');
-        window.location.href = 'login.html'; // Redirect to login page
-    }
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'login.html';
+        }
 
-    // Function to toggle the visibility of the profile menu
-    function toggleProfileMenu() {
-        const profileMenu = document.getElementById('profile-menu');
-        profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
-    }
-</script>
+        function toggleProfileMenu() {
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
 </html>

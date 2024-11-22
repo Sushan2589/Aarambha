@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #E8F1F2; /* Light background color */
+            background-color: #E8F1F2;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -15,21 +15,21 @@
             margin: 0;
         }
         .container {
-            background: #FFFFFF; /* White background for the form */
+            background: #FFFFFF;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-            width: 350px; /* Fixed width for the form */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 350px;
             text-align: center;
         }
         h1 {
-            color: #685044; /* Brown color for the heading */
+            color: #685044;
             margin-bottom: 20px;
         }
         label {
             display: block;
             margin-bottom: 8px;
-            color: #011627; /* Rich black/blue for labels */
+            color: #011627;
             font-weight: bold;
             text-align: left;
         }
@@ -37,17 +37,17 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #CED4DA; /* Light border */
-            border-radius: 4px; /* Rounded corners */
+            border: 1px solid #CED4DA;
+            border-radius: 4px;
             transition: border-color 0.3s;
         }
         input:focus {
-            border-color: #2C6E49; /* Green border on focus */
+            border-color: #2C6E49;
             outline: none;
         }
         button {
-            background-color: #2C6E49; /* Green button */
-            color: white; /* White text */
+            background-color: #2C6E49;
+            color: white;
             padding: 12px;
             border: none;
             border-radius: 4px;
@@ -57,16 +57,16 @@
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #9DD2B2; /* Light green on hover */
+            background-color: #9DD2B2;
         }
         .register-button {
             display: block;
             margin-top: 15px;
-            color: #2C6E49; /* Green color */
+            color: #2C6E49;
             text-decoration: none;
         }
         .register-button:hover {
-            text-decoration: underline; /* Underline on hover */
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -86,40 +86,36 @@
     </div>
 
     <script>
-        
         async function loginUser(event) {
+            event.preventDefault();
+            const usernameOrEmail = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
 
-        event.preventDefault();
-        const usernameOrEmail = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-
-        if (!usernameOrEmail || !password) {
-            swal("Error!", "Please fill in all fields!", "error");
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:3000/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usernameOrEmail, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userEmail', data.user.email);
-                window.location.href = 'forum.html';
-                    
-            } else {
-                swal("Error!", data.message, "error");
+            if (!usernameOrEmail || !password) {
+                swal("Error!", "Please fill in all fields!", "error");
+                return;
             }
-        } catch (error) {
-            swal("Error!", "Something went wrong. Please try again later.", "error");
-        }
-    }
 
+            try {
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usernameOrEmail, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userEmail', data.user.email);
+                    window.location.href = 'forum.html';
+                } else {
+                    swal("Error!", data.message, "error");
+                }
+            } catch (error) {
+                swal("Error!", "Something went wrong. Please try again later.", "error");
+            }
+        }
     </script>
     <script src="js/script.js"></script>
 </body>
