@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <title>Buy/Sell | AgriConnect</title>
+    <link rel="icon" type="image/x-icon" href="./img/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .marketplace {
+            padding: 2rem;
+            text-align: center;
+            background-color: #E8F1F2;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .product h3 {
+            color: #2C6E49;
+            margin: 0.5rem 0;
+        }
+
+        .product p {
+            color: #685044;
+            margin: 0.5rem 0;
+        }
+
+        .seller-info {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0.5rem 0;
+        }
+
+        .add-product-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #2C6E49;
+            color: white;
+            font-size: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        .calculate-total {
+            background: #2C6E49;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            margin: 2rem 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar">
+        <nav id="bar">
+            <h1><span style="color: #2C6E49;">AGRI</span><span style="color: #685044;">CONNECT</span></h1>
+            <ul>
+                <li class='navli'><a href="hero.html">Home</a></li>
+                <li class='navli'><a href="forum.html">Forum</a></li>
+                <li class='navli'><a href="about.html">About</a></li>
+                <li class='navli'><a class="active" href="buysell.html">Buy/Sell</a></li>
+                <li id="profile" class='navli' style="display: none;">
+                    <img id="profile-logo" src="img/logo.png" alt="Profile" onclick="toggleProfileMenu()" />
+                    <div id="profile-menu" style="display: none;">
+                        <p id="user-email">user@example.com</p>
+                        <a href="#" onclick="handleLogout()">Logout</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="ham" id="ham1" onclick="navig()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <div id="cross" class="ham" onclick="navig1()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="marketplace">
+        <h2>Welcome to AgriConnect Marketplace</h2>
+        <p>Buy and sell agricultural products directly from farmers</p>
+        
+        <section class="product-grid" id="productGrid">
+            <!-- Products will be dynamically added here -->
+        </section>
+
+        <button class="calculate-total" onclick="calculateTotal()">Calculate Total</button>
+        <button class="add-product-btn" onclick="showAddProductModal()">+</button>
+    </div>
+
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Product</h2>
+            <form id="addProductForm">
+                <input type="text" placeholder="Product Name" required>
+                <input type="text" placeholder="Seller Name" required>
+                <input type="tel" placeholder="Contact Number" required>
+                <input type="number" placeholder="Price" required>
+                <button type="submit">Add Product</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>Copyright© AgriConnect | All rights reserved</p>
+    </footer>
+
+    <script>
+        const products = [
+            { name: "NPK Fertilizer", seller: "Ram Kumar", contact: "9876543210", price: 500 },
+            { name: "Urea", seller: "Shyam Singh", contact: "9876543211", price: 300 },
+            { name: "Compost Manure", seller: "Mohan Das", contact: "9876543212", price: 200 },
+            { name: "Grains for Hen", seller: "Rajesh Kumar", contact: "9876543213", price: 400 },
+            { name: "Earthworm", seller: "Suresh Patel", contact: "9876543214", price: 250 },
+            { name: "Organic Pesticide", seller: "Dinesh Yadav", contact: "9876543215", price: 600 },
+            { name: "Seeds Mix", seller: "Amit Shah", contact: "9876543216", price: 350 },
+            { name: "Plant Growth Promoter", seller: "Vijay Kumar", contact: "9876543217", price: 450 },
+            { name: "Bio Fertilizer", seller: "Rakesh Singh", contact: "9876543218", price: 550 },
+            { name: "Soil Conditioner", seller: "Prakash Jha", contact: "9876543219", price: 400 },
+            { name: "Neem Cake", seller: "Arun Kumar", contact: "9876543220", price: 300 },
+            { name: "Vermicompost", seller: "Sanjay Gupta", contact: "9876543221", price: 350 },
+            { name: "Bone Meal", seller: "Manoj Tiwari", contact: "9876543222", price: 450 },
+            { name: "Fish Meal", seller: "Kishore Kumar", contact: "9876543223", price: 500 },
+            { name: "Potash", seller: "Ramesh Yadav", contact: "9876543224", price: 600 }
+        ];
+
+        function displayProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+            
+            products.forEach(product => {
+                const div = document.createElement('div');
+                div.className = 'product';
+                div.innerHTML = `
+                    <img src="img/logo.png" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="seller-info">Seller: ${product.seller}</p>
+                    <p class="seller-info">Contact: ${product.contact}</p>
+                    <p>Price: ₹${product.price}</p>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function showAddProductModal() {
+            document.getElementById('addProductModal').style.display = 'block';
+        }
+
+        function calculateTotal() {
+            const total = products.reduce((sum, product) => sum + product.price, 0);
+            alert(`Total value of all products: ₹${total}`);
+        }
+
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            products.push({
+                name: formData.get('Product Name'),
+                seller: formData.get('Seller Name'),
+                contact: formData.get('Contact Number'),
+                price: Number(formData.get('Price'))
+            });
+            displayProducts();
+            document.getElementById('addProductModal').style.display = 'none';
+            e.target.reset();
+        });
+
+        // Initial display
+        displayProducts();
+    </script>
+</body>
+</html>
