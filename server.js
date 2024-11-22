@@ -42,8 +42,10 @@ app.post('/login', async (req, res) => {
 
     try {
         const user = await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+        console.log(user.username);
         if (!user || user.password !== password) {
             return res.status(400).json({ message: 'Invalid credentials' });
+
         }
 
         // Here you would typically set a session or token
@@ -52,6 +54,8 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+
 
 // Start the server
 app.listen(PORT, () => {
