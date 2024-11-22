@@ -146,6 +146,9 @@
             box-sizing: border-box;
             transition: border-color 0.3s ease;
             background: rgba(255, 255, 255, 0.9);
+            max-height: 150px;
+            min-height: 80px;
+            resize: vertical;
         }
 
         input:focus, textarea:focus {
@@ -204,10 +207,10 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 400px;
+            width: 350px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 25px;
+            padding: 20px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             z-index: 1000;
@@ -249,8 +252,8 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        #post{
-            margin-top: 15rem;
+        #post {
+            margin-top: 0;
         }
     </style>
     
