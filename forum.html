@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
         :root {
             --primary-color: #2C6E49;
@@ -567,7 +569,7 @@
         function refreshPosts() {
             document.getElementById('forum').innerHTML = `
                 <div class="post">
-                    <h2>Discussion on using HTML, CSS and JS</h2>
+                    <h2>Discussion Forum</h2>
                     <p>Feel free to start a new thread or join an existing one.</p>
                 </div>
             `;
@@ -594,12 +596,13 @@
             <ul>
                 <li class='navli'><a  href="hero.html">Home</a></li>
                 <li class='navli'><a class="active" href="forum.html">Forum</a></li>
-                <li class='navli'><a href="about.html">About</a></li>
+                <li class='navli'><a href="weather.html">weather</a></li>
                 <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
                 <li id="sign" class='navli'>
                     <a href="#" onclick="toggleLoginDropdown()">Sign in</a>
                     <a href="signup.html">Sign up</a>
                 </li>
+                <li class='navli'><a href="profile.html"><i class="fa-regular fa-user"></i></a></li>
             </ul>
             <div class="ham" id="ham1" onclick="navig()">
                 <div class="line"></div>
@@ -631,7 +634,7 @@
     <div class="main-content">
         <div id="forum" class="forum">
             <div class="post">
-                <h2>Discussion on using HTML, CSS and JS</h2>
+                <h2>Discussion Forum</h2>
                 <p>Feel free to start a new thread or join an existing one.</p>
             </div>
         </div>
