@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriConnect- Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #2C6E49;
+        }
+
+        .profile-info h1 {
+            color: #2C6E49;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            color: #685044;
+            font-style: italic;
+        }
+
+        .connect-button {
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            background: #2C6E49;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .connect-button:hover {
+            background: #1a4f31;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            color: #2C6E49;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item p {
+            margin: 0.5rem 0;
+            color: #685044;
+        }
+
+        .stat-item span {
+            font-weight: bold;
+            color: #2C6E49;
+        }
+
+        .profile-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .profile-details h3 {
+            color: #2C6E49;
+            margin-bottom: 1rem;
+        }
+
+        .profile-details p {
+            margin: 0.5rem 0;
+            color: #685044;
+        }
+
+        .profile-details span {
+            color: #2C6E49;
+        }
+
+        .recent-activity {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .activity-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            padding: 1rem;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .activity-type {
+            color: #2C6E49;
+            font-weight: bold;
+        }
+
+        .activity-date {
+            color: #999;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar">
+        <nav id="bar">
+            <h1><span><img src="img/logo.png" alt="logo" style="width: 50px; height: 50px;"></span><span style="color: #2C6E49;">AGRI</span><span style="color: #685044;">CONNECT</span></h1>
+            <ul>
+                <li class='navli'><a  href="hero.html">Home</a></li>
+                <li class='navli'><a href="forum.html">Forum</a></li>
+                <li class='navli'><a href="weather.html">weather</a></li>
+                <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
+                <li class='navli'class="active"><a href="profile.html"><i class="fa-regular fa-user"></i></a></li>
+               
+                <li id="profile" class='navli' style="display: none;">
+                    <img id="profile-logo" src="img/logo.png" alt="Profile" onclick="toggleProfileMenu()" />
+                    <div id="profile-menu" style="display: none;">
+                        <p id="user-email">user@example.com</p>
+                        <a href="#" onclick="handleLogout()">Logout</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <div class="ham" id="ham1" onclick="navig()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+
+            <div id="cross" class="ham" onclick="navig1()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+        </nav>
+    </div>
+
+    <main>
+        <div class="profile-container">
+            <div class="profile-header">
+                <img src="img/logo.png" alt="Profile Picture" class="profile-pic">
+                <div class="profile-info">
+                    <h1>John Doe</h1>
+                    <p class="tagline">Farmer, Organic Enthusiast</p>
+                    <button class="connect-button">Connect</button>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <h3>Forum Activity</h3>
+                    <div class="stat-item">
+                        <p>Posts: <span>45</span></p>
+                        <p>Replies: <span>128</span></p>
+                        <p>Reputation Points: <span>324</span></p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Marketplace Activity</h3>
+                    <div class="stat-item">
+                        <p>Items Sold: <span>23</span></p>
+                        <p>Items Purchased: <span>15</span></p>
+                        <p>Rating: <span>4.8/5</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <h3>Farmer Details</h3>
+                <p>Location: <span>Ruralville, USA</span></p>
+                <p>Experience: <span>10 years</span></p>
+                <p>Specialization: <span>Organic Vegetables</span></p>
+                <p>Contact: <span>johndoe@email.com</span></p>
+                <p>About Me: <span>I am passionate about sustainable agriculture and organic farming practices. I have been farming for 10 years and specialize in growing a variety of organic vegetables.</span></p>
+            </div>
+
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <p class="activity-type">Sold</p>
+                        <p>Organic Tomatoes - 50kg</p>
+                        <p class="activity-date">2 days ago</p>
+                    </div>
+                    <div class="activity-item">
+                        <p class="activity-type">Forum Post</p>
+                        <p>Tips for Natural Pest Control</p>
+                        <p class="activity-date">5 days ago</p>
+                    </div>
+                    <div class="activity-item">
+                        <p class="activity-type">Purchased</p>
+                        <p>Organic Fertilizer - 100kg</p>
+                        <p class="activity-date">1 week ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; AgriConnect 2023</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Profile menu toggle
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profile-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Connect button functionality
+        document.querySelector('.connect-button').addEventListener('click', function() {
+            this.innerHTML = this.innerHTML === 'Connect' ? 'Connected' : 'Connect';
+            this.style.background = this.innerHTML === 'Connected' ? '#1a4f31' : '#2C6E49';
+        });
+
+        // Check login status on page load
+        window.addEventListener('load', function() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (userEmail) {
+                document.getElementById('user-email').textContent = userEmail;
+                document.getElementById('profile').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
