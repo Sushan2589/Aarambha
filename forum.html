@@ -3,6 +3,7 @@
 <head>
     <title>Forum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         :root {
             --primary-color: #2C6E49;
@@ -12,214 +13,240 @@
             --text-secondary: #685044;
             --error-color: #ff4444;
             --border-color: #ccc;
+            --post-bg: #f7f9fc;
+            --post-hover: #edf1f7;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto Condensed', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--background-color), var(--secondary-color));
         }
+        
         .forum {
             width: 80%;
-            margin: 0 auto;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
+        
         .forum .post {
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            margin-bottom: 10px;
+            background: var(--post-bg);
+            border: none;
+            padding: 20px;
+            margin: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
+
+        .forum .post:hover {
+            background: var(--post-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
         .forum .post .content {
-            margin-top: 10px;
+            margin-top: 15px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-        }
-        .user-select {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 5px;
-        }
-        .post-author {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-        .forum {
-            background-color: var(--background-color);
-            padding: 20px;
+            padding: 10px;
+            background: white;
             border-radius: 8px;
         }
 
-        .post {
-            background-color: #fff;
-            border: 1px solid var(--secondary-color);
-            border-radius: 4px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(1, 22, 39, 0.1);
-            position: relative;
-        }
-
-        .delete-button {
+        .user-select {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--error-color);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .post h2 {
-            color: var(--text-color);
-            margin: 0 0 10px 0;
-            font-size: 1.4em;
-        }
-
-        .post .content {
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .post-image {
-            max-width: 150px;
-            height: auto;
-            border-radius: 4px;
-            margin-left: 20px;
+            top: 80px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
         }
 
         .post-author {
             color: var(--primary-color);
-            font-weight: bold;
+            font-size: 0.95em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            background: rgba(44, 110, 73, 0.1);
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .post {
+            background: var(--post-bg);
+            border: none;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(1, 22, 39, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255, 68, 68, 0.9);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: var(--error-color);
+            transform: scale(1.05);
+        }
+
+        .post h2 {
+            color: var(--text-color);
+            margin: 0 0 15px 0;
+            font-size: 1.5em;
+            font-weight: 700;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 8px;
+        }
+
+        .post-image {
+            max-width: 200px;
+            height: auto;
+            border-radius: 10px;
+            margin-left: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .post-image:hover {
+            transform: scale(1.05);
         }
 
         .post-date {
-            color: #666;
-            font-size: 0.8em;
+            color: #888;
+            font-size: 0.85em;
             margin-left: 10px;
+            font-style: italic;
         }
 
         input, textarea {
             width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            border: 1px solid var(--secondary-color);
-            border-radius: 4px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
             box-sizing: border-box;
+            transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 110, 73, 0.2);
         }
 
         .file-upload {
             display: inline-block;
             cursor: pointer;
             color: var(--primary-color);
+            padding: 8px 15px;
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
-        .file-upload input[type="file"] {
-            display: none;
-        }
-
-        .file-name {
-            margin-left: 10px;
-            font-size: 0.9em;
-            color: #666;
+        .file-upload:hover {
+            background: rgba(44, 110, 73, 0.1);
         }
 
         button {
-            background-color: var(--primary-color);
-            color: var(--background-color);
+            background: linear-gradient(135deg, var(--primary-color), #245a3b);
+            color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 12px 25px;
+            border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         button:hover {
-            background-color: #245a3b;
-        }
-
-        .user-select {
-            background-color: var(--background-color);
-            border: 1px solid var(--secondary-color);
-            color: var(--text-color);
-            border-radius: 4px;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 110, 73, 0.3);
         }
 
         .like-button {
-            background-color: transparent;
+            background: transparent;
             color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 5px 10px;
-            margin-top: 10px;
+            border: 2px solid var(--primary-color);
+            padding: 8px 20px;
+            margin-top: 12px;
+            border-radius: 20px;
         }
 
         .like-button.liked {
-            background-color: var(--primary-color);
-            color: var(--background-color);
+            background: var(--primary-color);
+            color: white;
         }
 
-        .likes-info {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .like-count {
-            cursor: help;
-            padding: 2px 6px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            position: relative;
-        }
-
-        .like-users {
-            display: none;
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #fff;
-            padding: 8px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: 1px solid var(--secondary-color);
-            white-space: nowrap;
+        .post-form {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
             z-index: 1000;
+            animation: slideIn 0.5s ease;
         }
 
-        .like-count:hover .like-users {
-            display: block;
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
-        .replies {
-            margin-left: 30px;
-            border-left: 2px solid var(--secondary-color);
-            padding-left: 15px;
+        .main-content {
+            margin-top: 100px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .login-dropdown {
+            position: absolute;
+            top: 70px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
             display: none;
+            animation: slideDown 0.3s ease;
         }
 
-        .reply-form {
-            margin-top: 10px;
-            display: none;
-        }
-
-        .reply-button {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 5px 10px;
-            margin-right: 10px;
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.9em;
-            margin-top: 5px;
-            display: none;
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         #post{
@@ -321,7 +348,7 @@
                     <i class="fas fa-heart"></i>
                     ${likesHtml}
                 </div>
-                <div class="reply-form" id="replyForm-${heading}">
+                <div class="reply-form" id="replyForm-${heading}" style="display: none;">
                     <textarea id="replyContent-${heading}" placeholder="Write your reply..."></textarea>
                     <label class="file-upload">
                         <i class="fas fa-paperclip"></i>
@@ -331,7 +358,7 @@
                     <div class="error-message" id="replyError-${heading}">Please type something before submitting</div>
                     <button onclick="addReply('${heading}', '${content}', '${author}')">Submit Reply</button>
                 </div>
-                <div class="replies" id="replies-${heading}">
+                <div class="replies" id="replies-${heading}" style="display: none;">
                     ${repliesHtml}
                 </div>
             `;
@@ -511,9 +538,63 @@
             currentUser = document.getElementById('userSelect').value;
             refreshPosts();
         }
+
+        function toggleLoginDropdown() {
+            document.querySelector('.login-dropdown').classList.toggle('show');
+        }
     </script>
 </head>
 <body>
+    <div id="navbar">
+        <nav id="bar">
+            <h1><span style="color: #2C6E49;">AGRI</span><span style="color: #685044;">CONNECT</span></h1>
+            <ul>
+                <li class='navli'><a  href="">Home</a></li>
+                <li class='navli'><a class="active" href="forum.html">Forum</a></li>
+                <li class='navli'><a href="about.html">About</a></li>
+                <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
+                <li id="sign" class='navli'>
+                    <a href="#" onclick="toggleLoginDropdown()">Sign in</a>
+                    <a href="signup.html">Sign up</a>
+                </li>
+            </ul>
+            <div class="ham" id="ham1" onclick="navig()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <div id="cross" class="ham" onclick="navig1()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="login-dropdown">
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <select id="userSelect" class="user-select" onchange="changeUser()">
+        <option value="Sulav">Sulav</option>
+        <option value="Sushan">Sushan</option>
+        <option value="Unik">Unik</option>
+        <option value="Supreme">Supreme</option>
+        <option value="Ram">Ram</option>
+    </select>
+
+    <div class="main-content">
+        <div id="forum" class="forum">
+            <div class="post">
+                <h2>Discussion on using HTML, CSS and JS</h2>
+                <p>Feel free to start a new thread or join an existing one.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-form">
     <div id="post">
         <input type="text" id="postHeading" placeholder="Enter post heading">
         <textarea id="postContent" placeholder="Enter your post here"></textarea>
@@ -525,5 +606,6 @@
         <div class="error-message" id="postError">Please fill in both heading and content before posting</div>
         <button onclick="addPost()">Add Post</button>
     </div>
+    <script src="js/script.js"></script>
 </body>
 </html>
