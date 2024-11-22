@@ -248,12 +248,41 @@
             from { transform: translateY(-20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-    </style>
-    <script>
-        let currentUser = 'Sulav';
 
-        // Load existing posts from sessionStorage when page loads
+        #post{
+            margin-top: 15rem;
+        }
+    </style>
+    
+    
+    <script>
+        let currentUser = null;
+
+        // Function to check if the user is logged in
+        async function checkUserLoggedIn() {
+            try {
+                const response = await fetch('/me', {
+                    method: 'GET',
+                    credentials: 'include' // Include cookies in the request
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data.user.username; // Store the username
+                    document.getElementById('userDisplay').textContent = `Logged in as: ${currentUser}`; // Update the UI
+                } else {
+                    console.log('User is not logged in');
+                    document.getElementById('userDisplay').textContent = 'Not logged in';
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+            }
+        }
+
+        // Call this function when the page loads
         window.onload = function() {
+            checkUserLoggedIn();
+            // Load existing posts from sessionStorage when page loads
             const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
             posts.forEach(postData => {
                 createPostElement(postData.heading, postData.content, postData.author, postData.likes || [], postData.replies || [], postData.date || new Date().toLocaleString(), postData.image);
@@ -455,7 +484,7 @@
             var content = document.getElementById('postContent').value;
             var imageFile = document.getElementById('postImage').files[0];
             
-            if (!heading.trim() || !content.trim()) {
+            if (!heading.trim() || !content.trim() || !currentUser) {
                 document.getElementById('postError').style.display = 'block';
                 return;
             }
@@ -566,6 +595,7 @@
     </div>
 
     <div class="post-form">
+    <div id="post">
         <input type="text" id="postHeading" placeholder="Enter post heading">
         <textarea id="postContent" placeholder="Enter your post here"></textarea>
         <label class="file-upload">
