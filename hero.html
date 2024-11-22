@@ -10,6 +10,14 @@
     
     <title>Home | AgriConnect</title>
     <link rel="icon" type="image/x-icon" href="./img/logo.png">
+    <style>
+        /* Add your styles here */
+        #profile-logo {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%; /* Make it circular */
+        }
+    </style>
 </head>
 
 <body>
@@ -23,11 +31,14 @@
                 <li class='navli'><a href="forum.html">Forum</a></li>
                 <li class='navli'><a href="about.html">About</a></li>
                 <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
-                <li id="sign" class='navli'>
-                    <a href="login.html">Sign in</a>
-                    <a href="register.html">Sign up</a>
+               
+                <li id="profile" class='navli' style="display: none;">
+                    <img id="profile-logo" src="img/logo.png" alt="Profile" onclick="toggleProfileMenu()" />
+                    <div id="profile-menu" style="display: none;">
+                        <p id="user-email">user@example.com</p>
+                        <a href="#" onclick="handleLogout()">Logout</a>
+                    </div>
                 </li>
-                
             </ul>
 
             
@@ -58,4 +69,40 @@
 
 <link rel="stylesheet" href="css/style.css">
 <script src="js/script.js"></script>
+<script>
+    // Function to check if the user is logged in
+    async function checkUserLoggedIn() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const userEmail = localStorage.getItem('userEmail');
+
+        if (isLoggedIn) {
+            document.getElementById('user-email').textContent = userEmail; // Display user email
+            document.getElementById('profile').style.display = 'block'; // Show profile
+            document.getElementById('auth-links').style.display = 'none'; // Hide login/signup links
+        } else {
+            document.getElementById('user-email').textContent = 'NOT LOGGED IN'; // Default message
+            document.getElementById('profile').style.display = 'none'; // Hide profile
+            document.getElementById('auth-links').style.display = 'block'; // Show login/signup links
+        }
+    }
+
+    // Call this function when the page loads
+    window.onload = function() {
+        console.log('Checking user login status...');
+        checkUserLoggedIn();
+    }
+
+    // Function to handle logout
+    function handleLogout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userEmail');
+        window.location.href = 'login.html'; // Redirect to login page
+    }
+
+    // Function to toggle the visibility of the profile menu
+    function toggleProfileMenu() {
+        const profileMenu = document.getElementById('profile-menu');
+        profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+    }
+</script>
 </html>

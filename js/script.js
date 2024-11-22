@@ -1,7 +1,6 @@
 console.log ('hi')
 
 function navig() {
-    // nbbr = document.getElementsByClassName('ham')
     nbbr = document.querySelector('ul')
     console.log('no')
 
@@ -30,33 +29,21 @@ function navig1(){
     hi.style.display = 'none'
 
 }
-// script.js
 
+// Function to toggle the visibility of the profile menu
 function toggleProfileMenu() {
     const profileMenu = document.getElementById('profile-menu');
-    // Toggle the visibility of the profile menu
-    if (profileMenu.style.display === 'none' || profileMenu.style.display === '') {
-      profileMenu.style.display = 'block';
+    if (profileMenu.style.display === 'block') {
+        profileMenu.style.display = 'none'; // Hide the menu
     } else {
-      profileMenu.style.display = 'none';
+        profileMenu.style.display = 'block'; // Show the menu
     }
-  }
-  
-  // Hide dropdown menu when clicking outside
-  document.addEventListener('click', (event) => {
-    const profileMenu = document.getElementById('profile-menu');
-    const profileLogo = document.getElementById('profile-logo');
-    if (
-      profileMenu.style.display === 'block' &&
-      !profileMenu.contains(event.target) &&
-      !profileLogo.contains(event.target)
-    ) {
-      profileMenu.style.display = 'none';
-    }
-  });
-  
-  function handleLogout() {
-    console.log('Logout clicked');
-    // Optional: Add any additional logout logic here
-  }
-  
+}
+
+// script.js
+
+function handleLogout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    window.location.href = 'login.html'; // Redirect to login page
+}

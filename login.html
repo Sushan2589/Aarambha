@@ -87,37 +87,26 @@
 
     <script>
         async function loginUser(event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
             const usernameOrEmail = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
-            console.log('Attempting to log in user:', usernameOrEmail);
 
             try {
                 const response = await fetch('http://localhost:3000/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ usernameOrEmail, password })
                 });
 
-                console.log('Response status:', response.status);
                 const data = await response.json();
-                console.log('Response data:', data);
-
                 if (response.ok) {
-                    // Store logged-in state in local storage
                     localStorage.setItem('isLoggedIn', 'true');
-
-                    // Redirect to index.html immediately
+                    localStorage.setItem('userEmail', data.user.email);
                     window.location.href = 'heroIn.html';
                 } else {
-                    // SweetAlert for error
                     swal("Error!", data.message, "error");
                 }
             } catch (error) {
-                console.error('Error:', error);
                 swal("Error!", error.message, "error");
             }
         }
