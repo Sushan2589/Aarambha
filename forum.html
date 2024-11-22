@@ -266,25 +266,16 @@
         let currentUser = null;
 
         // Function to check if the user is logged in
-        async function checkUserLoggedIn() {
-            try {
-                const response = await fetch('/me', {
-                    method: 'GET',
-                    credentials: 'include' // Include cookies in the request
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    currentUser = data.user.username; // Store the username
-                    document.getElementById('userDisplay').textContent = `Logged in as: ${currentUser}`; // Update the UI
-                } else {
-                    console.log('User is not logged in');
-                    document.getElementById('userDisplay').textContent = 'Not logged in';
-                }
-            } catch (error) {
-                console.error('Error checking login status:', error);
+        function checkUserLoggedIn() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userEmail = localStorage.getItem('userEmail') || 'Guest';
+            
+            const userElement = document.getElementById('user-email');
+            if (userElement) {
+                userElement.textContent = isLoggedIn === 'true' ? `Logged in as: ${userEmail}` : 'Not logged in';
             }
-        }
+}
+
 
         // Call this function when the page loads
         window.onload = function() {
@@ -585,6 +576,26 @@
         function toggleLoginDropdown() {
             document.querySelector('.login-dropdown').classList.toggle('show');
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+            if (isLoggedIn === 'true') {
+
+                // Remove Sign In and Sign Up buttons
+                const signInButton = document.getElementById('signIn');
+                const signUpButton = document.getElementById('signUp');
+                
+                if (signInButton) signInButton.style.display = 'none';
+                if (signUpButton) signUpButton.style.display = 'none';
+            }
+        });
+
+        
+
+        
+
     </script>
 </head>
 <body>
@@ -597,8 +608,8 @@
                 <li class='navli'><a href="about.html">About</a></li>
                 <li class='navli'><a href="buysell.html">Buy/Sell</a></li>
                 <li id="sign" class='navli'>
-                    <a href="#" onclick="toggleLoginDropdown()">Sign in</a>
-                    <a href="signup.html">Sign up</a>
+                    <a id="signIn" href="login.html" onclick="toggleLoginDropdown()">Sign in</a>
+                    <a id="signUp" href="register.html">Sign up</a>
                 </li>
             </ul>
             <div class="ham" id="ham1" onclick="navig()">
