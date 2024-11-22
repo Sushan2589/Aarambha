@@ -3,6 +3,7 @@
 <head>
     <title>Forum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
         :root {
@@ -25,12 +26,13 @@
         }
         
         .forum {
-            width: 80%;
-            margin: 20px auto;
+            width: 70%;
+            margin: 20px;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            float: left;
         }
         
         .forum .post {
@@ -53,7 +55,7 @@
             margin-top: 15px;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             padding: 10px;
             background: white;
             border-radius: 8px;
@@ -189,7 +191,7 @@
             box-shadow: 0 5px 15px rgba(44, 110, 73, 0.3);
         }
 
-        .like-button {
+        .follow-button {
             background: transparent;
             color: var(--primary-color);
             border: 2px solid var(--primary-color);
@@ -198,23 +200,23 @@
             border-radius: 20px;
         }
 
-        .like-button.liked {
+        .follow-button.followed {
             background: var(--primary-color);
             color: white;
         }
 
         .post-form {
             position: fixed;
-            bottom: 20px;
+            top: 50%;
             right: 20px;
-            width: 350px;
+            width: 25%;
+            transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             padding: 20px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             z-index: 1000;
-            animation: slideIn 0.5s ease;
         }
 
         @keyframes slideIn {
@@ -232,6 +234,8 @@
             margin-top: 100px;
             margin-bottom: 40px;
             padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
         }
 
         .login-dropdown {
@@ -288,7 +292,7 @@
             // Load existing posts from sessionStorage when page loads
             const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
             posts.forEach(postData => {
-                createPostElement(postData.heading, postData.content, postData.author, postData.likes || [], postData.replies || [], postData.date || new Date().toLocaleString(), postData.image);
+                createPostElement(postData.heading, postData.content, postData.author, postData.follows || [], postData.agrees || [], postData.replies || [], postData.date || new Date().toLocaleString(), postData.image);
             });
 
             // Add file upload listeners
@@ -301,21 +305,31 @@
             });
         }
 
-        function createPostElement(heading, content, author, likes = [], replies = [], date, image) {
+        function createPostElement(heading, content, author, follows = [], agrees = [], replies = [], date, image) {
             var post = document.createElement('div');
             post.className = 'post';
             const authorDisplay = author === currentUser ? 'You' : author;
-            const isLiked = likes.includes(currentUser);
-            const likeButtonText = isLiked ? 'Unlike' : 'Like';
-            const likeButtonClass = isLiked ? 'like-button liked' : 'like-button';
+            const isFollowed = follows.includes(currentUser);
+            const isAgreed = agrees.includes(currentUser);
+            const followButtonText = isFollowed ? 'Unfollow' : 'Follow';
+            const agreeButtonText = isAgreed ? 'Disagree' : 'Agree';
+            const followButtonClass = isFollowed ? 'follow-button followed' : 'follow-button';
             
-            const likeCount = likes.length;
-            const likesHtml = likeCount > 0 ? 
-                `<span class="like-count">
-                    ${likeCount} ${likeCount === 1 ? 'like' : 'likes'}
-                    <span class="like-users">Liked by ${likes.join(', ')}</span>
+            const followCount = follows.length;
+            const agreeCount = agrees.length;
+            const followsHtml = followCount > 0 ? 
+                `<span class="follow-count">
+                    ${followCount} ${followCount === 1 ? 'follower' : 'followers'}
+                    <span class="follow-users">Followed by ${follows.join(', ')}</span>
                  </span>` : 
-                'No likes yet';
+                'No followers yet';
+            
+            const agreesHtml = agreeCount > 0 ?
+                `<span class="agree-count">
+                    ${agreeCount} ${agreeCount === 1 ? 'agreement' : 'agreements'}
+                    <span class="agree-users">Agreed by ${agrees.join(', ')}</span>
+                </span>` :
+                'No agreements yet';
 
             const repliesHtml = replies.map(reply => `
                 <div class="post">
@@ -344,12 +358,17 @@
                     <div>${content}</div>
                     ${image ? `<img src="${image}" class="post-image" alt="Post image">` : ''}
                 </div>
-                <button class="${likeButtonClass}" onclick="toggleLike('${heading}', '${content}', '${author}')">${likeButtonText}</button>
+                <button class="${followButtonClass}" onclick="toggleFollow('${heading}', '${content}', '${author}')">${followButtonText}</button>
+                <button class="agree-button" onclick="toggleAgree('${heading}', '${content}', '${author}')">${agreeButtonText}</button>
                 <button class="reply-button" onclick="toggleReplyForm('${heading}', '${content}', '${author}')">Reply</button>
                 <button onclick="toggleReplies('${heading}')" id="toggleBtn-${heading}">Show Replies (${replies.length})</button>
-                <div class="likes-info">
-                    <i class="fas fa-heart"></i>
-                    ${likesHtml}
+                <div class="follows-info">
+                    <i class="fas fa-user-plus"></i>
+                    ${followsHtml}
+                </div>
+                <div class="agrees-info">
+                    <i class="fas fa-check"></i>
+                    ${agreesHtml}
                 </div>
                 <div class="reply-form" id="replyForm-${heading}" style="display: none;">
                     <textarea id="replyContent-${heading}" placeholder="Write your reply..."></textarea>
@@ -461,20 +480,41 @@
             }
         }
 
-        function toggleLike(heading, content, author) {
+        function toggleFollow(heading, content, author) {
             const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
             const postIndex = posts.findIndex(p => p.heading === heading && p.content === content && p.author === author);
             
             if (postIndex !== -1) {
-                if (!posts[postIndex].likes) {
-                    posts[postIndex].likes = [];
+                if (!posts[postIndex].follows) {
+                    posts[postIndex].follows = [];
                 }
                 
-                const likeIndex = posts[postIndex].likes.indexOf(currentUser);
-                if (likeIndex === -1) {
-                    posts[postIndex].likes.push(currentUser);
+                const followIndex = posts[postIndex].follows.indexOf(currentUser);
+                if (followIndex === -1) {
+                    posts[postIndex].follows.push(currentUser);
                 } else {
-                    posts[postIndex].likes.splice(likeIndex, 1);
+                    posts[postIndex].follows.splice(followIndex, 1);
+                }
+                
+                sessionStorage.setItem('forumPosts', JSON.stringify(posts));
+                refreshPosts();
+            }
+        }
+
+        function toggleAgree(heading, content, author) {
+            const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
+            const postIndex = posts.findIndex(p => p.heading === heading && p.content === content && p.author === author);
+            
+            if (postIndex !== -1) {
+                if (!posts[postIndex].agrees) {
+                    posts[postIndex].agrees = [];
+                }
+                
+                const agreeIndex = posts[postIndex].agrees.indexOf(currentUser);
+                if (agreeIndex === -1) {
+                    posts[postIndex].agrees.push(currentUser);
+                } else {
+                    posts[postIndex].agrees.splice(agreeIndex, 1);
                 }
                 
                 sessionStorage.setItem('forumPosts', JSON.stringify(posts));
@@ -499,21 +539,21 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     // Create and add post element to DOM with image
-                    createPostElement(heading, content, currentUser, [], [], date, e.target.result);
+                    createPostElement(heading, content, currentUser, [], [], [], date, e.target.result);
 
                     // Save to sessionStorage
                     const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
-                    posts.push({ heading, content, author: currentUser, likes: [], replies: [], date, image: e.target.result });
+                    posts.push({ heading, content, author: currentUser, follows: [], agrees: [], replies: [], date, image: e.target.result });
                     sessionStorage.setItem('forumPosts', JSON.stringify(posts));
                 };
                 reader.readAsDataURL(imageFile);
             } else {
                 // Create and add post element to DOM without image
-                createPostElement(heading, content, currentUser, [], [], date);
+                createPostElement(heading, content, currentUser, [], [], [], date);
 
                 // Save to sessionStorage
                 const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
-                posts.push({ heading, content, author: currentUser, likes: [], replies: [], date });
+                posts.push({ heading, content, author: currentUser, follows: [], agrees: [], replies: [], date });
                 sessionStorage.setItem('forumPosts', JSON.stringify(posts));
             }
 
@@ -533,7 +573,7 @@
             `;
             const posts = JSON.parse(sessionStorage.getItem('forumPosts') || '[]');
             posts.forEach(postData => {
-                createPostElement(postData.heading, postData.content, postData.author, postData.likes || [], postData.replies || [], postData.date, postData.image);
+                createPostElement(postData.heading, postData.content, postData.author, postData.follows || [], postData.agrees || [], postData.replies || [], postData.date, postData.image);
             });
         }
 
@@ -595,19 +635,20 @@
                 <p>Feel free to start a new thread or join an existing one.</p>
             </div>
         </div>
-    </div>
 
-    <div class="post-form">
-    <div id="post">
-        <input type="text" id="postHeading" placeholder="Enter post heading">
-        <textarea id="postContent" placeholder="Enter your post here"></textarea>
-        <label class="file-upload">
-            <i class="fas fa-paperclip"></i>
-            <input type="file" id="postImage" accept="image/*">
-            <span class="file-name">No file chosen</span>
-        </label>
-        <div class="error-message" id="postError">Please fill in both heading and content before posting</div>
-        <button onclick="addPost()">Add Post</button>
+        <div class="post-form">
+            <div id="post">
+                <input type="text" id="postHeading" placeholder="Enter post heading">
+                <textarea id="postContent" placeholder="Enter your post here"></textarea>
+                <label class="file-upload">
+                    <i class="fas fa-paperclip"></i>
+                    <input type="file" id="postImage" accept="image/*">
+                    <span class="file-name">No file chosen</span>
+                </label>
+                <div class="error-message" id="postError">Please fill in both heading and content before posting</div>
+                <button onclick="addPost()">Add Post</button>
+            </div>
+        </div>
     </div>
     <script src="js/script.js"></script>
 </body>
