@@ -7,18 +7,17 @@
 body{
     background: #9DD2B2;
     scroll-behavior: smooth;
-    padding-top: 80px; /* Add padding to account for fixed navbar */
 }
 
 #navbar{
     background-color: #011627;
-    height: 80px; /* Set fixed height */
-    line-height: 80px; /* Match height for vertical centering */
+    height: fit-content;
+    line-height: 600%;
     color: #E8F1F2;
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 100;
+    z-index: 100; /* Add z-index to ensure navbar stays on top */
 }
 
 a{
@@ -62,6 +61,9 @@ li{
     border: 2px solid #2C6E49;
 }
 
+
+
+
 #sign a:hover {
     transform: translateY(-2px);
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -71,6 +73,7 @@ h1{
     display: inline;
     font-size: 2.4rem;
     margin-left: 6vw;
+    margin-top: 3vh;
     text-transform: uppercase;
     word-spacing: 0.5rem;
     cursor: pointer;
@@ -85,7 +88,7 @@ h1{
 
 #logoo{
     margin: auto;
-    margin-top: 100px; /* Reduced margin since we have padding-top on body */
+    margin-top: 300px;
     display: block;
     width: 250px;
 }
@@ -125,10 +128,10 @@ footer{
 
 .ham{
     position: absolute;
-    top: 20px; /* Adjusted for new navbar height */
+    top: 33px;
     right: 10px;
     display: none;
-    z-index: 101;
+    z-index: 101; /* Add z-index to ensure hamburger menu stays on top */
 }
 
 @media only screen and (max-width: 1096px){
